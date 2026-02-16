@@ -1,0 +1,84 @@
+﻿@{
+    ViewData["Title"] = "Student Profile";
+}
+
+<div class="container mt-5">
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <img src="https://via.placeholder.com/150"
+                         class="rounded-circle mb-3"
+                         width="150"
+                         height="150" />
+
+                    <h4>Student Name</h4>
+                    <p class="text-muted">student@email.com</p>
+                    <p>Phone: 05xxxxxxxx</p>
+
+                    <button class="btn btn-outline-primary btn-sm">
+                        Edit Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    Borrowed Books
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Book</th>
+                                <th>Borrow Date</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Sample Book</td>
+                                <td>01/01/2026</td>
+                                <td>15/01/2026</td>
+                                <td><span class="badge bg-warning">Pending</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    Room Reservations
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Room</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Room A</td>
+                                <td>05/01/2026</td>
+                                <td>10:00 AM - 12:00 PM</td>
+                                <td><span class="badge bg-success">Approved</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

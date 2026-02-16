@@ -1,0 +1,51 @@
+﻿@model List<LibraryManagementSystem.Models.Book>
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container mt-3">
+    <h2>Search Books</h2>
+
+    <form method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Search by ID or Title" />
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Available Copies</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model)
+            {
+                <tr>
+                    <td>@book.Id</td>
+                    <td>@book.Title</td>
+                    <td>@book.Author</td>
+                    <td>@book.CopiesAvailable</td>
+                    <td>
+                        @if (book.CopiesAvailable > 0)
+                        {
+                            <a asp-action="BorrowBook" asp-route-id="@book.Id" class="btn btn-primary btn-sm">
+                                Borrow
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="text-danger">Not Available</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

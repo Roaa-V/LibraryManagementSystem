@@ -1,0 +1,32 @@
+﻿<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Borrow Date</th>
+            <th>Due Date</th>
+            <th>Approved?</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Book.Title</td>
+                <td>@item.Book.Author</td>
+                <td>@item.BorrowDate?.ToString("yyyy-MM-dd")</td>
+                <td>@item.DueDate?.ToString("yyyy-MM-dd")</td>
+                <td>
+                    @if (item.IsConfirmedByAdmin)
+                    {
+                        <span class="text-success">Yes ✅</span>
+                    }
+                    else
+                    {
+                        <span class="text-warning">Pending ⏳</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,28 @@
+﻿@model List<LibraryManagementSystem.Models.RoomReservation>
+
+<h2>Pending Room Reservations</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Room</th>
+            <th>Student</th>
+            <th>Reservation Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.Room.RoomName</td>
+                <td>@r.Student.Name</td>
+                <td>@r.ReservationDateTime.ToString("g")</td>
+                <td>
+                    <a asp-action="ApproveRoom" asp-route-id="@r.Id" class="btn btn-success btn-sm">Approve</a>
+                    <a asp-action="RejectRoom" asp-route-id="@r.Id" class="btn btn-danger btn-sm">Reject</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

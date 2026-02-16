@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Submit Feedback";
+}
+
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Submit Feedback</h4>
+        </div>
+        <div class="card-body">
+
+            <form asp-action="Feedback" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Message</label>
+                    <textarea class="form-control" name="message" rows="5" placeholder="Write your feedback here..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    Submit Feedback
+                </button>
+            </form>
+
+            <hr />
+
+            <h5 class="mt-4">Your Past Feedbacks</h5>
+            <ul class="list-group mt-2">
+                @foreach (var fb in ViewBag.PastFeedbacks as List<LibraryManagementSystem.Models.Feedback>)
+                {
+                    <li class="list-group-item">
+                        <strong>@fb.SubmittedAt?.ToString("g")</strong> -
+                        @fb.Message
+                        <span class="badge @(fb.IsReviewed == true ? "bg-success" : "bg-warning") float-end">
+                            @(fb.IsReviewed == true ? "Reviewed" : "Pending")
+                        </span>
+                    </li>
+                }
+            </ul>
+
+        </div>
+    </div>
+</div>

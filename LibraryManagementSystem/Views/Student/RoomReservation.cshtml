@@ -1,0 +1,62 @@
+﻿@model List<LibraryManagementSystem.Models.MeetingRoom>
+
+<h2>Reserve a Room</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <h4>Available Rooms</h4>
+        <table class="table table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Room Name</th>
+                    <th>Location</th>
+                    <th>Capacity</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var room in Model)
+                {
+                    <tr>
+                        <td>@room.RoomName</td>
+                        <td>@room.Location</td>
+                        <td>@room.Capacity</td>
+                        <td>
+                            <a asp-action="ReserveRoom" asp-route-id="@room.Id" class="btn btn-primary btn-sm">
+                                Reserve
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-6">
+        <h4>My Reservations</h4>
+        <table class="table table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Room</th>
+                    <th>Reservation Time</th>
+                    <th>End Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var room in Model)
+                {
+                    @foreach (var r in room.RoomReservations.Where(rr => rr.StudentId == 1)) // replace 1 with logged-in student ID
+                    {
+                        <tr>
+                            <td>@room.RoomName</td>
+                            <td>@r.ReservationDateTime.ToString("g")</td>
+                            <td>@(r.EndDateTime.HasValue? r.EndDateTime.Value.ToString("g") : "-")</td>
+                            <td>@(r.IsConfirmedByAdmin == true ? "Approved" : "Pending")</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

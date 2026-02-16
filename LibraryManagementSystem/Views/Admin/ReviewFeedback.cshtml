@@ -1,0 +1,32 @@
+﻿@model IEnumerable<LibraryManagementSystem.Models.Feedback>
+
+<h2>Student Feedback</h2>
+
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Student</th>
+            <th>Message</th>
+            <th>Submitted At</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var fb in Model)
+        {
+            <tr>
+                <td>@fb.Student.Name</td>
+                <td>@fb.Message</td>
+                <td>@(fb.SubmittedAt.HasValue? fb.SubmittedAt.Value.ToString("g") : "-")</td>
+                <td>@(fb.IsReviewed == true ? "Reviewed" : "Pending")</td>
+                <td>
+                    @if (fb.IsReviewed != true)
+                    {
+                        <a asp-action="MarkAsReviewed" asp-route-id="@fb.Id" class="btn btn-success btn-sm">Mark Reviewed</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
