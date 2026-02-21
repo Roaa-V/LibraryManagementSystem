@@ -1,8 +1,8 @@
 ﻿using LibraryManagementSystem.Models;
+using Microsoft.AspNetCore.Http;        
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using Microsoft.AspNetCore.Http;        
 
 namespace LibraryManagement.Controllers
 {
@@ -166,7 +166,6 @@ namespace LibraryManagement.Controllers
         {
             return View();
         }
-
         // POST: Students/Register
         [HttpPost]
         public IActionResult Register(Student student)
@@ -177,6 +176,15 @@ namespace LibraryManagement.Controllers
                 return View(student);
             }
 
+            if (string.IsNullOrWhiteSpace(student.Password))
+            {
+                ModelState.AddModelError("Password", "Password is required");
+                return View(student);
+            }
+
+            // Hash the password
+            student.PasswordHash = BCrypt.Net.BCrypt.HashPassword(student.Password);
+
             _context.Students.Add(student);
             _context.SaveChanges();
 
@@ -186,21 +194,18 @@ namespace LibraryManagement.Controllers
             // Redirect to home page
             return RedirectToAction("Index");
         }
-
         // GET: Students/Login
         public IActionResult Login()
-{
-    return View();
-}
+        {
+           return View();
+        }
 
-// POST: Students/Login
 [HttpPost]
 public IActionResult Login(string email, string password)
 {
-    var student = _context.Students
-        .FirstOrDefault(s => s.Email == email /*&& s.Password == password*/);
+    var student = _context.Students.FirstOrDefault(s => s.Email == email);
 
-    if (student == null)
+    if (student == null || !BCrypt.Net.BCrypt.Verify(password, student.PasswordHash))
     {
         ModelState.AddModelError("", "Invalid email or password");
         return View();
@@ -211,6 +216,14 @@ public IActionResult Login(string email, string password)
 
     return RedirectToAction("Profile");
 }
+
+        // GET: Logout
+        // StudentController
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear(); // clear all session data
+            return RedirectToAction("Index", "Home"); // make sure you redirect to an existing page
+        }
 
         public IActionResult Profile()
         {

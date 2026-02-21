@@ -1,4 +1,4 @@
-﻿@model LibraryManagementSystem.Models.Student
+﻿@model LibraryManagementSystem.Models.Admin
 
 @{
     Layout = "_Layout";
@@ -7,26 +7,14 @@
 <div class="container mt-5">
     <div class="card shadow">
         <div class="card-header bg-primary text-white">
-            <h4>Student Registration</h4>
+            <h4>Admin Login</h4>
         </div>
         <div class="card-body">
-            <form asp-action="Register" method="post">
-                <div class="mb-3">
-                    <label class="form-label">Name</label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-
+            <form asp-action="Login" method="post">
                 <div class="mb-3">
                     <label class="form-label">Email</label>
                     <input asp-for="Email" type="email" class="form-control" />
                     <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Phone Number</label>
-                    <input asp-for="PhoneNumber" class="form-control" />
-                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
@@ -35,7 +23,7 @@
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
 
-                <button type="submit" class="btn btn-success">Register</button>
+                <button type="submit" class="btn btn-success">Login</button>
             </form>
         </div>
     </div>

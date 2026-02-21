@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Text;
 
 namespace LibraryManagement.Controllers
 {
@@ -19,9 +20,65 @@ namespace LibraryManagement.Controllers
             return View();
         }
 
-        public IActionResult AdminLogin()
+        public IActionResult Register()
         {
             return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Register(Admin admin)
+        {
+            if (_context.Admins.Any(a => a.Email == admin.Email))
+            {
+                ModelState.AddModelError("Email", "Email already exists");
+                return View(admin);
+            }
+
+            if (string.IsNullOrWhiteSpace(admin.Password))
+            {
+                ModelState.AddModelError("Password", "Password is required");
+                return View(admin);
+            }
+
+            // Hash the password
+            admin.PasswordHash = BCrypt.Net.BCrypt.HashPassword(admin.Password);
+
+            _context.Admins.Add(admin);
+            _context.SaveChanges();
+
+            // Redirect to login
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        // POST: Admin/Login
+        [HttpPost]
+        public IActionResult Login(string email, string password)
+        {
+            var admin = _context.Admins.FirstOrDefault(a => a.Email == email);
+
+            if (admin == null || !BCrypt.Net.BCrypt.Verify(password, admin.PasswordHash))
+            {
+                ModelState.AddModelError("", "Invalid email or password");
+                return View();
+            }
+
+            // Set session for logged-in admin
+            HttpContext.Session.SetInt32("AdminId", admin.Id);
+
+            // Redirect to Admin dashboard
+            return RedirectToAction("Index");
+        }
+
+        // GET: Admin/Logout
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("AdminId");
+            return RedirectToAction("Index", "Home");
         }
 
         // ✅ Show all books
@@ -176,10 +233,7 @@ namespace LibraryManagement.Controllers
             return RedirectToAction("ReviewFeedback");
         }
 
-        public IActionResult ExportReports()
-        {
-            return View();
-        }
+      
 
         // GET
         public IActionResult CreateBook()
@@ -252,6 +306,60 @@ namespace LibraryManagement.Controllers
 
             return RedirectToAction("ManageBooks");
         }
+
+
+        public IActionResult ExportReports(string type = "borrowings")
+        {
+            StringBuilder csv = new StringBuilder();
+
+            if (type == "borrowings")
+            {
+                var borrowings = _context.BorrowedBooks
+                    .Include(b => b.Student)
+                    .Include(b => b.Book)
+                    .ToList();
+
+                // CSV Header
+                csv.AppendLine("StudentName,StudentEmail,BookTitle,BookId,BorrowDate,ReturnDate");
+
+                foreach (var b in borrowings)
+                {
+                    string studentName = b.Student?.Name ?? "Unknown";
+                    string studentEmail = b.Student?.Email ?? "Unknown";
+                    string bookTitle = b.Book?.Title ?? "Unknown";
+                    int bookId = b.Book?.Id ?? 0;
+
+                    csv.AppendLine($"{studentName},{studentEmail},{bookTitle},{bookId},{b.BorrowDate},{b.ReturnDate}");
+                }
+
+                return File(Encoding.UTF8.GetBytes(csv.ToString()), "text/csv", "BorrowingsReport.csv");
+            }
+            else if (type == "reservations")
+            {
+                var reservations = _context.RoomReservations
+                    .Include(r => r.Student)
+                    .Include(r => r.Room) // your navigation property
+                    .ToList();
+
+                // CSV Header
+                csv.AppendLine("StudentName,StudentEmail,RoomName,Location,ReservationDate,EndDate,Confirmed");
+
+                foreach (var r in reservations)
+                {
+                    string studentName = r.Student?.Name ?? "Unknown";
+                    string studentEmail = r.Student?.Email ?? "Unknown";
+                    string roomName = r.Room?.RoomName ?? "Unknown";
+                    string location = r.Room?.Location ?? "Unknown";
+
+                    csv.AppendLine($"{studentName},{studentEmail},{roomName},{location},{r.ReservationDateTime},{r.EndDateTime},{r.IsConfirmedByAdmin}");
+                }
+
+                return File(Encoding.UTF8.GetBytes(csv.ToString()), "text/csv", "RoomReservationsReport.csv");
+            }
+
+            return BadRequest("Invalid report type.");
+        }
+
 
     }
 }
