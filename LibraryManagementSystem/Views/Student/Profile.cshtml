@@ -1,21 +1,24 @@
-﻿@{
+﻿@model LibraryManagementSystem.Models.Student
+
+@{
     ViewData["Title"] = "Student Profile";
 }
 
 <div class="container mt-5">
 
     <div class="row">
+        <!-- Left column: Profile info -->
         <div class="col-md-4">
             <div class="card shadow text-center">
                 <div class="card-body">
-                    <img src="https://via.placeholder.com/150"
+                    <img src="@(!string.IsNullOrEmpty(Model.ProfilePictureUrl) ? Model.ProfilePictureUrl : "https://via.placeholder.com/150")"
                          class="rounded-circle mb-3"
                          width="150"
                          height="150" />
 
-                    <h4>Student Name</h4>
-                    <p class="text-muted">student@email.com</p>
-                    <p>Phone: 05xxxxxxxx</p>
+                    <h4>@Model.Name</h4>
+                    <p class="text-muted">@Model.Email</p>
+                    <p>Phone: @(Model.PhoneNumber ?? "N/A")</p>
 
                     <button class="btn btn-outline-primary btn-sm">
                         Edit Profile
@@ -24,61 +27,102 @@
             </div>
         </div>
 
+        <!-- Right column: Borrowed books and room reservations -->
         <div class="col-md-8">
 
+            <!-- Borrowed Books -->
             <div class="card shadow mb-4">
                 <div class="card-header bg-primary text-white">
                     Borrowed Books
                 </div>
                 <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Book</th>
-                                <th>Borrow Date</th>
-                                <th>Due Date</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Sample Book</td>
-                                <td>01/01/2026</td>
-                                <td>15/01/2026</td>
-                                <td><span class="badge bg-warning">Pending</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    @if (Model.BorrowedBooks != null && Model.BorrowedBooks.Any())
+                    {
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Book</th>
+                                    <th>Borrow Date</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var b in Model.BorrowedBooks)
+                                {
+                                    <tr>
+                                        <td>@b.Book.Title</td>
+                                        <td>@b.BorrowDate?.ToString("yyyy-MM-dd")</td>
+                                        <td>@b.DueDate.ToString("yyyy-MM-dd")</td>
+                                        <td>
+                                            @if (b.ReturnDate == null)
+                                            {
+                                                <span class="badge bg-warning">Pending</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">Returned</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p>No borrowed books yet.</p>
+                    }
                 </div>
             </div>
 
+            <!-- Room Reservations -->
             <div class="card shadow">
                 <div class="card-header bg-success text-white">
                     Room Reservations
                 </div>
                 <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Room</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Room A</td>
-                                <td>05/01/2026</td>
-                                <td>10:00 AM - 12:00 PM</td>
-                                <td><span class="badge bg-success">Approved</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                    @if (Model.RoomReservations != null && Model.RoomReservations.Any())
+                    {
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Room</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
+</tr>
+</thead>
+<tbody>
+    @foreach (var r in Model.RoomReservations)
+    {
+        <tr>
+            <td>@r.Room.RoomName</td>
+            <td>@r.ReservationDateTime.ToString("yyyy-MM-dd")</td>
+            <td>@r.ReservationDateTime.ToString("HH:mm") - @r.EndDateTime?.ToString("HH:mm")</td>
+            <td>
+                @if (r.IsConfirmedByAdmin == true)
+                {
+                    <span class="badge bg-success">Approved</span>
+                }
+                else
+                {
+                    <span class="badge bg-warning">Pending</span>
+                }
+            </td>
+        </tr>
+    }
+</tbody>
+</table>
+                    }
+                    else
+                    {
+<p>No room reservations yet.</p>
+                    }
+</div>
+</div>
 
-        </div>
-    </div>
+</div>
+</div>
 
 </div>
