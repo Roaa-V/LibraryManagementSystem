@@ -179,7 +179,8 @@ namespace LibraryManagement.Controllers
 
         public IActionResult ApproveRoom(int id)
         {
-            var reservation = _context.RoomReservations.FirstOrDefault(r => r.Id == id);
+            var reservation = _context.RoomReservations.Find(id);
+            
             if (reservation != null)
             {
                 reservation.IsConfirmedByAdmin = true;
@@ -199,18 +200,7 @@ namespace LibraryManagement.Controllers
             return RedirectToAction("RoomRequests");
         }
 
-        public IActionResult ConfirmRoom(int id)
-        {
-            var reservation = _context.RoomReservations.Find(id);
-
-            if (reservation != null)
-            {
-                reservation.IsConfirmedByAdmin = true;
-                _context.SaveChanges();
-            }
-
-            return RedirectToAction("RoomRequests");
-        }
+  
 
 
         public IActionResult ReviewFeedback()

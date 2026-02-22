@@ -215,80 +215,15 @@ public IActionResult Profile()
     }
 }
 
-        //// GET
-        //public IActionResult Register()
-        //    {
-        //        return View();
-        //    }
-
-        //    // POST
-        //    [HttpPost]
-        //    public IActionResult Register(Student student)
-        //    {
-        //        if (_context.Students.Any(s => s.Email == student.Email))
-        //        {
-        //            ModelState.AddModelError("Email", "Email already exists");
-        //            return View(student);
-        //        }
-
-        //        _context.Students.Add(student);
-        //        _context.SaveChanges();
-
-        //        // set session
-        //        HttpContext.Session.SetInt32("StudentId", student.Id);
-
-        //        return RedirectToAction("Profile");
-        //    }
-
-        //    // GET
-        //    public IActionResult Login()
-        //    {
-        //        return View();
-        //    }
-
-        //    // POST
-        //    [HttpPost]
-        //    public IActionResult Login(string email, string password)
-        //    {
-        //        var student = _context.Students.FirstOrDefault(s => s.Email == email && s.Password == password);
-
-        //        if (student == null)
-        //        {
-        //            ModelState.AddModelError("", "Invalid email or password");
-        //            return View();
-        //        }
-
-        //        HttpContext.Session.SetInt32("StudentId", student.Id);
-        //        return RedirectToAction("Profile");
-        //    }
-
-        // Update Profile to get the logged-in student
-        //public IActionResult Profile()
-        //{
-        //    var studentId = HttpContext.Session.GetInt32("StudentId");
-        //    if (studentId == null)
-        //        return RedirectToAction("Login");
-
-        //    var student = _context.Students
-        //        .Include(s => s.BorrowedBooks)
-        //            .ThenInclude(b => b.Book)
-        //        .Include(s => s.RoomReservations)
-        //            .ThenInclude(r => r.Room)
-        //        .FirstOrDefault(s => s.Id == studentId.Value);
-
-        //    return View(student);
-        //}
-
-
-        //[HttpPost]
-        //public IActionResult EditProfile(Student student)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Students.Update(student);
-        //        _context.SaveChanges();
-        //        return RedirectToAction("Profile");
-        //    }
-        //    return View(student);
-        //}
+//[HttpPost]
+//public IActionResult EditProfile(Student student)
+//{
+//    if (ModelState.IsValid)
+//    {
+//        _context.Students.Update(student);
+//        _context.SaveChanges();
+//        return RedirectToAction("Profile");
+//    }
+//    return View(student);
+//}
 
