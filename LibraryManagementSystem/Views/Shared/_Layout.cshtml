@@ -9,11 +9,13 @@
     <link rel="stylesheet" href="~/LibraryManagementSystem.styles.css" asp-append-version="true" />
     <style>
         body {
-            background-color: #e6f0fa; /* light baby-blue background */
+            margin: 0;
+            background-color: #f4f8f4;
+            font-family: 'Segoe UI', sans-serif;
         }
 
         .navbar {
-            background-color: #5b9bd5 !important; /* baby blue */
+            background: #7a9e7e; /* sage green */
         }
 
         /* Main navbar links (Home, Student, Admin when not logged in) */
@@ -23,8 +25,8 @@
         }
 
         .navbar .nav-link:hover {
-            color: #ffd966 !important;
-        }
+                    background-color: #5f8762;
+                }
 
         /* Logged-in student/admin menu items */
         .navbar .logged-in-nav {
@@ -63,7 +65,7 @@
 <header>
     <nav class="navbar navbar-expand-sm navbar-dark border-bottom box-shadow mb-3">
         <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LibraryManagementSystem</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Everleaf</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -72,33 +74,13 @@
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
 
-                    @* Student logged in *@
-                    @if (Context.Session.GetInt32("StudentId") != null)
-                    {
-                        <li class="nav-item"><a class="nav-link" asp-controller="Student" asp-action="BookSearch">Book Search</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Student" asp-action="BorrowedBooks">Borrowed Books</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Student" asp-action="RoomReservation">Room Reservation</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Student" asp-action="Feedback">Feedback</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Student" asp-action="Profile">Profile</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Student" asp-action="Logout">Logout</a></li>
-                    }
-                    @* Admin logged in *@
-                    else if (Context.Session.GetInt32("AdminId") != null)
-                    {
-                        <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="ManageBooks">Manage Books</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="BorrowRequests">Borrow Requests</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="ManageRooms">Manage Rooms</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="RoomRequests">Room Requests</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="ReviewFeedback">Review Feedback</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="ExportReports">Export Reports</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="Logout">Logout</a></li>
-                        }
-                        @* Not logged in *@
-                        else
-                        {
-                            <li class="nav-item"><a class="nav-link" asp-controller="Student" asp-action="Login">Student</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="Index">Admin</a></li>
-                        }
+                            <li class="nav-item"><a class="nav-link" asp-controller="Student" asp-action="BookSearch">Books</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Student" asp-action="RoomReservation">Rooms</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Student" asp-action="Feedback">Feedback</a></li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="LoginChoice">Login</a>
+                            </li>
+                       
                     </ul>
                 </div>
             </div>
@@ -113,7 +95,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2026 - LibraryManagementSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2026 - Everleaf - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 

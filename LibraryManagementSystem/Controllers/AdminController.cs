@@ -71,7 +71,7 @@ namespace LibraryManagement.Controllers
             HttpContext.Session.SetInt32("AdminId", admin.Id);
 
             // Redirect to Admin dashboard
-            return RedirectToAction("Index");
+            return RedirectToAction("Index" , "Admin");
         }
 
         // GET: Admin/Logout
@@ -84,12 +84,15 @@ namespace LibraryManagement.Controllers
         // ✅ Show all books
         public IActionResult ManageBooks()
         {
+            ViewData["ExportAction"] = "ExportReports";
+
             var books = _context.Books.ToList();
             return View(books);
         }
 
         public IActionResult BorrowRequests()
         {
+            ViewData["ExportAction"] = "ExportReports";
             var requests = _context.BorrowedBooks
                 .Include(b => b.Book)
                 .Include(b => b.Student)
@@ -138,6 +141,9 @@ namespace LibraryManagement.Controllers
 
         public IActionResult ManageRooms()
         {
+
+            ViewData["ExportAction"] = "ExportReports";
+
             var rooms = _context.MeetingRooms.ToList();
             return View(rooms);
         }
@@ -168,6 +174,8 @@ namespace LibraryManagement.Controllers
         // Show pending room reservations
         public IActionResult RoomRequests()
         {
+            ViewData["ExportAction"] = "ExportReports";
+
             var requests = _context.RoomReservations
                 .Include(r => r.Room)
                 .Include(r => r.Student)
@@ -205,6 +213,8 @@ namespace LibraryManagement.Controllers
 
         public IActionResult ReviewFeedback()
         {
+            ViewData["ExportAction"] = "ExportReports";
+
             var feedbacks = _context.Feedbacks
                 .Include(f => f.Student)
                 .ToList();
@@ -298,16 +308,26 @@ namespace LibraryManagement.Controllers
         }
 
 
-        public IActionResult ExportReports(string type = "borrowings")
+        public IActionResult ExportReports(string type = "borrowings", string search = null)
         {
-            StringBuilder csv = new StringBuilder();
+            StringBuilder csv = new();
 
             if (type == "borrowings")
             {
-                var borrowings = _context.BorrowedBooks
-                    .Include(b => b.Student)
-                    .Include(b => b.Book)
-                    .ToList();
+                var query = _context.BorrowedBooks
+                                    .Include(b => b.Student)
+                                    .Include(b => b.Book)
+                                    .AsQueryable();
+
+                // Apply search filter if provided (e.g., by student name or book title)
+                if (!string.IsNullOrEmpty(search))
+                {
+                    query = query.Where(b =>
+                        b.Student.Name.Contains(search) ||
+                        b.Book.Title.Contains(search));
+                }
+
+                var borrowings = query.ToList();
 
                 // CSV Header
                 csv.AppendLine("StudentName,StudentEmail,BookTitle,BookId,BorrowDate,ReturnDate");
@@ -326,10 +346,19 @@ namespace LibraryManagement.Controllers
             }
             else if (type == "reservations")
             {
-                var reservations = _context.RoomReservations
-                    .Include(r => r.Student)
-                    .Include(r => r.Room) // your navigation property
-                    .ToList();
+                var query = _context.RoomReservations
+                                    .Include(r => r.Student)
+                                    .Include(r => r.Room)
+                                    .AsQueryable();
+
+                if (!string.IsNullOrEmpty(search))
+                {
+                    query = query.Where(r =>
+                        r.Student.Name.Contains(search) ||
+                        r.Room.RoomName.Contains(search));
+                }
+
+                var reservations = query.ToList();
 
                 // CSV Header
                 csv.AppendLine("StudentName,StudentEmail,RoomName,Location,ReservationDate,EndDate,Confirmed");
@@ -347,6 +376,21 @@ namespace LibraryManagement.Controllers
                 return File(Encoding.UTF8.GetBytes(csv.ToString()), "text/csv", "RoomReservationsReport.csv");
             }
 
+            else if (type == "feedback")
+            {
+                var feedbacks = _context.Feedbacks
+                                        .Include(f => f.Student)
+                                        .ToList();
+
+                csv.AppendLine("StudentName,StudentEmail,Feedback,DateSubmitted");
+
+                foreach (var f in feedbacks)
+                {
+                    csv.AppendLine($"{f.Student?.Name},{f.Student?.Email},{f.Message}");
+                }
+
+                return File(Encoding.UTF8.GetBytes(csv.ToString()), "text/csv", "FeedbackReport.csv");
+            }
             return BadRequest("Invalid report type.");
         }
 

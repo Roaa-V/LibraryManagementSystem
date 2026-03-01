@@ -33,10 +33,7 @@ namespace LibraryManagement.Controllers
             return View();
         }
 
-        public IActionResult StudentLogin()
-        {
-            return View();
-        }
+     
 
         public IActionResult BookSearch(string search)
         {
@@ -94,23 +91,26 @@ namespace LibraryManagement.Controllers
             return View(rooms);
         }
 
-        public IActionResult ReserveRoom(int id)
+        [HttpPost]
+        public IActionResult ReserveRoom(int roomId, DateTime startTime, DateTime endTime)
         {
             var student = GetLoggedInStudent();
             if (student == null) return RedirectToAction("Login");
 
             var reservation = new RoomReservation
             {
-                RoomId = id,
+                RoomId = roomId,
                 StudentId = student.Id,
-                ReservationDateTime = DateTime.Now,
-                EndDateTime = DateTime.Now.AddHours(2),
+                ReservationDateTime = startTime,
+                EndDateTime = DateTime.Now.AddHours(2), // always 2 hours later
                 IsConfirmedByAdmin = false
             };
 
             _context.RoomReservations.Add(reservation);
             _context.SaveChanges();
 
+
+            TempData["ShowToast"] = true; // triggers toast
             return RedirectToAction("RoomReservation");
         }
 
@@ -212,18 +212,59 @@ public IActionResult Profile()
 
     return View(student);
 }
+
+
+
+        public IActionResult EditProfile()
+        {
+            var studentId = HttpContext.Session.GetInt32("StudentId");
+
+            if (studentId == null)
+                return RedirectToAction("Login");
+
+            var student = _context.Students.Find(studentId);
+
+            return View(student);
+        }
+
+        [HttpPost]
+        public IActionResult EditProfile(Student model, IFormFile? profileImage)
+        {
+            var studentId = HttpContext.Session.GetInt32("StudentId");
+
+            if (studentId == null)
+                return RedirectToAction("Login");
+
+            var student = _context.Students.Find(studentId);
+
+            if (student == null)
+                return NotFound();
+
+            // Update basic info
+            student.Name = model.Name;
+            student.Email = model.Email;
+
+            // Image upload
+            if (profileImage != null && profileImage.Length > 0)
+            {
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(profileImage.FileName);
+                var path = Path.Combine(Directory.GetCurrentDirectory(),
+                                        "wwwroot/images/profiles",
+                                        fileName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    profileImage.CopyTo(stream);
+                }
+
+                student.ProfileImagePath = "/images/profiles/" + fileName;
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Profile");
+        }
+
+
     }
 }
-
-//[HttpPost]
-//public IActionResult EditProfile(Student student)
-//{
-//    if (ModelState.IsValid)
-//    {
-//        _context.Students.Update(student);
-//        _context.SaveChanges();
-//        return RedirectToAction("Profile");
-//    }
-//    return View(student);
-//}
-

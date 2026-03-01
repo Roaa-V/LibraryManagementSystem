@@ -1,4 +1,6 @@
 ﻿@{
+    Layout = "_AdminLayout";
+
     ViewData["Title"] = "Manage Rooms";
 }
 @model List<LibraryManagementSystem.Models.MeetingRoom>
@@ -14,6 +16,14 @@
 
     <div class="card shadow">
         <div class="card-body">
+
+            <form method="get" asp-action="ExportReports" class="me-2">
+                <input type="hidden" name="type" value="reservations" />
+                <button type="submit" class="btn"
+                        style="background-color: #a3d2ca; color: #0b3d2e; font-weight: 500; border-radius: 10px;">
+                    <i class="bi bi-file-earmark-arrow-down me-1"></i> Export Rooms CSV
+                </button>
+            </form>
 
             <table class="table table-striped">
                 <thead class="table-dark">

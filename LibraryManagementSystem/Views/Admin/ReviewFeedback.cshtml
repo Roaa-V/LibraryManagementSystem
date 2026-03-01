@@ -1,6 +1,18 @@
 ﻿@model IEnumerable<LibraryManagementSystem.Models.Feedback>
 
+@{
+    Layout = "_AdminLayout";
+}
+
+
 <h2>Student Feedback</h2>
+
+<form method="get" asp-action="ExportReports" class="mb-3">
+    <input type="hidden" name="type" value="feedback" />
+    <button type="submit" class="btn" style="background-color: #e0bbff; color: #333; border-radius: 10px;">
+        Export Feedback CSV
+    </button>
+</form>
 
 <table class="table table-striped">
     <thead class="table-dark">

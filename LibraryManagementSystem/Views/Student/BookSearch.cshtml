@@ -1,51 +1,78 @@
 ﻿@model List<LibraryManagementSystem.Models.Book>
-
 @{
-    Layout = "_Layout";
+    Layout = "_StudentLayout";
 }
 
-<div class="container mt-3">
-    <h2>Search Books</h2>
+@{
+    var studentId = Context.Session.GetInt32("StudentId");
+    var showToast = TempData["ShowToast"] != null && (bool)TempData["ShowToast"];
+}
 
-    <form method="get" class="mb-3">
-        <div class="input-group">
-            <input type="text" name="search" class="form-control" placeholder="Search by ID or Title" />
-            <button type="submit" class="btn btn-primary">Search</button>
+<h2 class="mb-4" style="color:#5f6d57;">Available Books</h2>
+
+<div class="row">
+    @foreach (var book in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm hover-shadow" style="border-radius: 15px; background-color:#f4f7f3; transition: transform 0.3s, box-shadow 0.3s;">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold mb-3" style="color:#7a9e7e;">@book.Title</h5>
+                    <p class="card-text mb-2" style="color:#4a4a4a;">
+                        <i class="bi bi-person-fill"></i> <strong>Author:</strong> @book.Author <br />
+                        <i class="bi bi-tags-fill"></i> <strong>Genre:</strong> @(string.IsNullOrEmpty(book.Genre) ? "N/A" : book.Genre) <br />
+                        <i class="bi bi-card-text"></i> <strong>Description:</strong> @(string.IsNullOrEmpty(book.Description) ? "No description" : book.Description)<br />
+                        <i class="bi bi-stack"></i> <strong>Copies:</strong> @(book.CopiesAvailable > 0 ? book.CopiesAvailable : "None") <br />
+                    </p>
+
+                    @if (book.CopiesAvailable > 0)
+                    {
+                        <form asp-action="BorrowBook" asp-route-id="@book.Id">
+                            <input type="hidden" name="bookId" value="@book.Id" />
+                            <button type="submit" class="btn btn-outline-info w-100 fw-bold">Borrow</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <button class="btn btn-secondary w-100 fw-bold" disabled>Unavailable</button>
+                    }
+                </div>
+            </div>
         </div>
-    </form>
-
-    <table class="table table-bordered">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Available Copies</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var book in Model)
-            {
-                <tr>
-                    <td>@book.Id</td>
-                    <td>@book.Title</td>
-                    <td>@book.Author</td>
-                    <td>@book.CopiesAvailable</td>
-                    <td>
-                        @if (book.CopiesAvailable > 0)
-                        {
-                            <a asp-action="BorrowBook" asp-route-id="@book.Id" class="btn btn-primary btn-sm">
-                                Borrow
-                            </a>
-                        }
-                        else
-                        {
-                            <span class="text-danger">Not Available</span>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    }
 </div>
+
+<!-- Toast notification -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+    <div class="toast align-items-center text-white" role="alert" aria-live="assertive" aria-atomic="true" @if(!showToast){
+    <text>style="display:none;"</text>
+        }
+>
+        <div class="d-flex">
+            <div class="toast-body" style="background-color:#7a9e7e;">
+                Book borrowed! Waiting for admin approval.
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Card hover effect
+        document.querySelectorAll('.hover-shadow').forEach(card => {
+            card.addEventListener('mouseover', () => card.style.transform = 'translateY(-5px)');
+            card.addEventListener('mouseout', () => card.style.transform = 'translateY(0)');
+        });
+
+        // Show toast if flag is set
+        var showToast = @showToast.ToString().ToLower();
+        if(showToast){
+            var toastEl = document.querySelector('.toast');
+            var toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        }
+    </script>
+}
+
+<!-- Add Bootstrap Icons CDN in _Layout if not already -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">

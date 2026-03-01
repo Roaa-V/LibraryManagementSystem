@@ -3,11 +3,10 @@
 @{
     Layout = "_Layout";
 }
-
-<div class="container mt-5">
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-            <h4>Admin Login</h4>
+<div class="auth-page">
+    <div class="card auth-card">
+        <div class="card-header">
+            Admin Login
         </div>
         <div class="card-body">
             <form asp-action="Login" method="post">
@@ -23,7 +22,12 @@
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
 
-                <button type="submit" class="btn btn-success">Login</button>
+                <button type="submit" class="btn btn-submit">Login</button>
+
+                <div class="mt-3 text-center">
+                    <span>Don't have an account?</span>
+                    <a asp-controller="Admin" asp-action="Register">Register here</a>
+                </div>
             </form>
         </div>
     </div>

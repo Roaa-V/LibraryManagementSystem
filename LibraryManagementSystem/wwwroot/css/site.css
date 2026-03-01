@@ -30,3 +30,424 @@ body {
     background-color: #1e1e1e;
     color: white;
 }*/
+.hero {
+    min-height: 100vh; /* full viewport height */
+    background: url('/images/library-hero.jpeg') center center / cover no-repeat;
+    position: relative;
+    color: white;
+}
+
+    .hero .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.4); /* dark transparent overlay to mute image */
+        z-index: 1;
+    }
+
+    .hero .container {
+        position: relative;
+        z-index: 2; /* put text above overlay */
+    }
+
+/* --- General Body --- */
+body {
+    background-color: #f5f0e1; /* warm parchment */
+    font-family: 'Georgia', serif;
+    color: #3e5f4e; /* deep green text */
+}
+
+/* --- Cards --- */
+.card {
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+    background-color: #fdf6ec; /* muted parchment */
+    color: #3e5f4e;
+}
+
+.card-header {
+    background-color: #7a9e7e; /* sage green header for cards */
+    color: #f5f0e1;
+    font-weight: 600;
+}
+
+.card-footer {
+    background-color: #e0d6c2; /* soft warm footer */
+}
+
+/* --- Buttons --- */
+.btn {
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.btn-success, .btn-primary {
+    background-color: #e0a153; /* warm ochre */
+    border-color: #8b5e3c; /* muted chestnut */
+    color: #f5f0e1;
+}
+
+    .btn-success:hover, .btn-primary:hover {
+        background-color: #c9893a; /* darker ochre hover */
+        border-color: #7b4e2c;
+        color: #fdf6ec;
+    }
+
+/* --- Forms --- */
+input.form-control, select.form-control, textarea.form-control {
+    border-radius: 8px;
+    border: 1px solid #7a9e7e; /* subtle sage border */
+    padding: 8px 12px;
+    background-color: #fff8f0;
+    color: #3e5f4e;
+    transition: all 0.3s;
+}
+
+    input.form-control:focus, select.form-control:focus, textarea.form-control:focus {
+        border-color: #e0a153;
+        box-shadow: 0 0 5px rgba(224, 161, 83, 0.5);
+        outline: none;
+    }
+
+/* --- Forms Validation Messages --- */
+.text-danger {
+    color: #a94442 !important; /* reddish error text for contrast */
+}
+
+/* --- Links inside cards / forms --- */
+.card a, .content a {
+    color: #8b5e3c;
+}
+
+    .card a:hover, .content a:hover {
+        color: #e0a153;
+        text-decoration: underline;
+    }
+
+/* --- Footer --- */
+footer {
+    background-color: #7a9e7e;
+    color: #f5f0e1;
+    padding:5x 0;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* --- Optional subtle hover for cards --- */
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
+
+/* --- Login & Register Cards --- */
+/* Auth page */
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    background: linear-gradient(160deg, #f4f8f4 0%, #f5e9e0 100%); /* subtle sage + warm cream */
+    padding: 20px;
+}
+
+/* Card */
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    color: #2e2e2e;
+}
+
+    /* Card header */
+    .auth-card .card-header {
+        background: linear-gradient(135deg, #5f8762, #c1854a, #e6a1a1); /* gradient sage + warm + dusty pink */
+        color: #fff;
+        font-weight: 600;
+        text-align: center;
+        padding: 20px;
+        font-size: 1.3rem;
+    }
+
+    /* Card body */
+    .auth-card .card-body {
+        padding: 25px;
+        background-color: rgba(255,255,255,0.95); /* slightly translucent for warmth */
+        border-radius: 0 0 16px 16px;
+    }
+
+    /* Inputs */
+    .auth-card input.form-control {
+        border-radius: 10px;
+        border: 1px solid #c0c0b0;
+        padding: 10px;
+        transition: all 0.3s ease;
+    }
+
+        .auth-card input.form-control:focus {
+            border-color: #7a9e7e;
+            box-shadow: 0 0 6px rgba(122,158,126,0.5);
+        }
+
+    /* Submit button */
+    .auth-card button.btn-submit {
+        width: 100%;
+        background: linear-gradient(120deg, #d9a066, #e6a1a1); /* warm gradient */
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        padding: 12px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+    }
+
+        .auth-card button.btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            background: linear-gradient(120deg, #c1854a, #e6a1a1);
+        }
+
+    /* Links */
+    .auth-card a {
+        color: #7a9e7e;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+        .auth-card a:hover {
+            text-decoration: underline;
+            color: #5f8762;
+        }
+
+
+/* ------------------------------
+   General font & colors
+--------------------------------*/
+body, .card, input, button {
+    font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+    color: #3c3c3c; /* readable dark slate */
+}
+
+/* ------------------------------
+   Cards (Books / Info / etc)
+--------------------------------*/
+.card {
+    border-radius: 15px;
+    background-color: #f4f7f3; /* soft sage green */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+
+/* Card hover effect */
+.hover-card {
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+    .hover-card:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+
+.card-header {
+    background-color: #d9c0c0; /* dusty pink header for cozy look */
+    color: #3c3c3c;
+    font-weight: 600;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+/* Card Titles and Text */
+.card-title {
+    color: #5f6d57; /* dusty green-brown */
+    font-weight: 600;
+}
+
+.card-text {
+    color: #4a4a4a;
+}
+
+/* ------------------------------
+   Buttons
+--------------------------------*/
+.btn-success, .btn-outline-info {
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-success {
+    background-color: #7a9e7e; /* sage green */
+    border-color: #5f8762;
+    color: #fff;
+}
+
+    .btn-success:hover {
+        background-color: #5f8762;
+        color: #fff;
+    }
+
+.btn-outline-info {
+    border-color: #7a9e7e;
+    color: #7a9e7e;
+}
+
+    .btn-outline-info:hover {
+        background-color: #7a9e7e;
+        color: #fff;
+    }
+
+.btn-secondary {
+    background-color: #d9c0c0; /* dusty pink for disabled */
+    color: #fff;
+    border: none;
+}
+
+/* ------------------------------
+   Inputs / Forms
+--------------------------------*/
+input.form-control {
+    border-radius: 10px;
+    border: 1px solid #c5c5c5;
+    padding: 10px;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+    input.form-control:focus {
+        border-color: #7a9e7e;
+        box-shadow: 0 0 8px rgba(122, 158, 126, 0.3);
+    }
+
+/* Labels */
+.form-label {
+    font-weight: 500;
+    color: #4a4a4a;
+}
+
+/* Form card */
+.auth-card {
+    border-radius: 15px;
+    background-color: #f4f7f3;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+    /* Form header */
+    .auth-card .card-header {
+        background-color: #d9c0c0;
+        color: #3c3c3c;
+        font-weight: 600;
+        font-size: 1.2rem;
+        text-align: center;
+        border-radius: 10px 10px 0 0;
+    }
+
+/* ------------------------------
+   Toast notifications
+--------------------------------*/
+.toast-body {
+    background-color: #7a9e7e !important;
+    color: #fff !important;
+}
+
+/* ------------------------------
+   Links & hover effects
+--------------------------------*/
+a {
+    transition: color 0.3s ease;
+}
+
+    a:hover {
+        color: #7a9e7e;
+    }
+
+/* ------------------------------
+   Misc spacing
+--------------------------------*/
+.container {
+    max-width: 1200px;
+}
+
+
+
+
+
+
+/* Buttons */
+.custom-btn {
+    background: linear-gradient(120deg, #f4a6a6, #e4d6c8); /* dusty pink to warm beige */
+    border: none;
+    color: #4a3f35;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+}
+
+    .custom-btn:hover {
+        background: linear-gradient(120deg, #e47c7c, #d4b8a3);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+/* Disabled button style */
+.btn-disabled {
+    background-color: #d3cfcf;
+    color: #888;
+    border-radius: 10px;
+}
+
+/* Table base */
+.table-custom {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 0.5rem; /* space between rows for a "card-like" look */
+    font-family: 'Segoe UI', sans-serif;
+    color: #2f4f4f;
+}
+
+    .table-custom th {
+        background-color: #7a9e7e; /* sage green */
+        color: #fdf6e3; /* light warm text */
+        font-weight: 600;
+        padding: 0.75rem 1rem;
+        border: none;
+        text-align: left;
+        border-radius: 0.5rem 0.5rem 0 0;
+    }
+
+    .table-custom td {
+        background-color: #f5f5dc; /* dusty warm background for rows */
+        padding: 0.75rem 1rem;
+        vertical-align: middle;
+        border: none;
+        border-radius: 0 0 0.5rem 0.5rem;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .table-custom tbody tr:hover td {
+        background-color: #e0e5d8; /* slightly darker on hover */
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    /* Buttons inside table */
+    .table-custom .btn {
+        background-color: #a8dadc;
+        color: #1d3557;
+        font-weight: 600;
+        border: none;
+        border-radius: 0.5rem;
+        padding: 0.35rem 0.75rem;
+        transition: background-color 0.2s, transform 0.2s;
+    }
+
+        .table-custom .btn:hover {
+            background-color: #81b2b5;
+            transform: translateY(-2px);
+            color: #fdf6e3;
+        }

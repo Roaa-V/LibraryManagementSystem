@@ -30,4 +30,6 @@ public partial class Student
     public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
     public virtual ICollection<RoomReservation> RoomReservations { get; set; } = new List<RoomReservation>();
+
+    public string? ProfileImagePath { get; set; }
 }

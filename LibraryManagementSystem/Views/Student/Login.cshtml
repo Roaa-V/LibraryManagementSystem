@@ -1,12 +1,13 @@
 ﻿@model LibraryManagementSystem.Models.Student
 
-@{
-    Layout = "_Layout";
-}
+@* @{
+    Layout = "_StudentLayout";
+} *@
 
-<div class="container mt-5">
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white">
+
+<div class="auth-page">
+    <div class="card auth-card">
+        <div class="card-header">
             <h4>Student Login</h4>
         </div>
         <div class="card-body">
@@ -33,8 +34,9 @@
             </form>
         </div>
     </div>
-</div>
+    
 
+</div>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

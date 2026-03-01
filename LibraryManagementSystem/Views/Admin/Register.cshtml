@@ -1,14 +1,11 @@
 ﻿@model LibraryManagementSystem.Models.Admin
-
 @{
     Layout = "_Layout";
 }
 
 <div class="container mt-5">
-    <div class="card shadow">
-        <div class="card-header bg-dark text-white">
-            <h4>Admin Registration</h4>
-        </div>
+    <div class="auth-card mx-auto" style="max-width: 450px;">
+        <div class="card-header">Admin Registration</div>
         <div class="card-body">
             <form asp-action="Register" method="post">
                 <div class="mb-3">
@@ -29,12 +26,13 @@
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
 
-                <button type="submit" class="btn btn-success">Register</button>
+                <button type="submit" class="btn btn-success w-100">Register</button>
+
+                <div class="mt-3 text-center">
+                    <span>Already have an account? </span>
+                    <a asp-controller="Admin" asp-action="Login">Login here</a>
+                </div>
             </form>
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}

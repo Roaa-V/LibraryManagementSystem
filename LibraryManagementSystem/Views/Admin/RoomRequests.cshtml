@@ -1,6 +1,26 @@
 ﻿@model List<LibraryManagementSystem.Models.RoomReservation>
 
+@{
+    Layout = "_AdminLayout";
+}
+
+
 <h2>Pending Room Reservations</h2>
+
+@* <div class="d-flex justify-content-end mb-3">
+    <a asp-action="@(ViewData["ExportAction"] ?? "Export")" class="btn"
+       style="background-color: #a3d2ca; color: #0b3d2e; font-weight: 500;">
+        <i class="bi bi-file-earmark-arrow-down me-1"></i> Export
+    </a>
+</div> *@
+
+<form method="get" asp-action="ExportReports" class="mb-3">
+    <input type="hidden" name="type" value="reservations" />  @* rooms data *@
+    <button type="submit" class="btn"
+            style="background-color: #a3d2ca; color: #0b3d2e; font-weight: 500; border-radius: 10px;">
+        <i class="bi bi-file-earmark-arrow-down me-1"></i> Export Room Reservations CSV
+    </button>
+</form>
 
 <table class="table table-bordered table-striped">
     <thead class="table-dark">

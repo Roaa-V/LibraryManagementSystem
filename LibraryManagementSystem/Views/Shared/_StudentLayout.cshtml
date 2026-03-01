@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LibraryManagementSystem</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/LibraryManagementSystem.styles.css" asp-append-version="true" />
+    
+    <style>
+        body {
+            margin: 0;
+            background-color: #f4f8f4;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            background: #7a9e7e; /* sage green */
+            padding-top: 30px;
+            color: white;
+        }
+
+            .sidebar h4 {
+                text-align: center;
+                margin-bottom: 30px;
+                font-weight: 600;
+            }
+
+            .sidebar a {
+                display: block;
+                padding: 12px 25px;
+                color: #f1f1f1;
+                text-decoration: none;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            }
+
+                .sidebar a:hover {
+                    background-color: #5f8762;
+                    padding-left: 35px;
+                }
+
+                .sidebar a.active {
+                    background-color: #4f6f52;
+                }
+
+        /* Main content */
+        .content {
+            margin-left: 250px;
+            padding: 40px;
+        }
+
+        .logout-link {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+        }
+
+            .logout-link a {
+                color: #ffe5e5;
+            }
+
+                .logout-link a:hover {
+                    background-color: #a94442;
+                }
+
+        .sidebar a.active {
+            background-color: #5f8762; /* slightly darker sage */
+            font-weight: 700;
+            border-left: 5px solid #ffe599; /* warm highlight */
+            padding-left: 30px; /* keep hover effect consistent */
+        }
+
+        .sidebar a {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h4>Student</h4>
+        @{
+            var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+        }
+
+        <li class="nav-item">
+            <a class="nav-link @(currentAction == "BookSearch" ? "active" : "")"
+               asp-controller="Student" asp-action="BookSearch">
+                Book Search
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link @(currentAction == "BorrowedBooks" ? "active" : "")"
+               asp-controller="Student" asp-action="BorrowedBooks">
+                Borrowed Books
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link @(currentAction == "RoomReservation" ? "active" : "")"
+               asp-controller="Student" asp-action="RoomReservation">
+                Room Reservation
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link @(currentAction == "Feedback" ? "active" : "")"
+               asp-controller="Student" asp-action="Feedback">
+                Feedback
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link @(currentAction == "Profile" ? "active" : "")"
+               asp-controller="Student" asp-action="Profile">
+                Profile
+            </a>
+        </li>
+
+        <div class="logout-link text-center">
+            <a asp-controller="Student" asp-action="Logout">Logout</a>
+        </div>
+    </div>
+
+    <div class="content">
+        @RenderBody()
+    </div>
+
+
+    <br />
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2026 - Everleaf - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
+
+
+

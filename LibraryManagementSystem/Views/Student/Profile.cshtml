@@ -2,30 +2,122 @@
 
 @{
     ViewData["Title"] = "Student Profile";
+    Layout = "_StudentLayout";
+
+    string imagePath = string.IsNullOrEmpty(Model.ProfileImagePath)
+        ? "/images/profiles/default.png"
+        : Model.ProfileImagePath;
 }
+
+<style>
+    /* Fonts & palette */
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        color: #2c3e50; /* dark slate for text */
+    }
+
+    .card {
+        border-radius: 1rem;
+        transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+    }
+
+    .card-header {
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .card-header.bg-primary {
+        background-color: #7a9e7e !important; /* sage green */
+        color: #fff;
+    }
+
+    .card-header.bg-success {
+        background-color: #d8a39d !important; /* dusty pink */
+        color: #fff;
+    }
+
+    /* Profile image */
+    .profile-img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #7a9e7e;
+        margin-bottom: 1rem;
+    }
+
+    /* Buttons */
+    .btn-outline-primary {
+        border-color: #7a9e7e;
+        color: #7a9e7e;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+    .btn-outline-primary:hover {
+        background-color: #7a9e7e;
+        color: #fff;
+    }
+
+    /* Tables */
+    table.table {
+        border-radius: 0.75rem;
+        overflow: hidden;
+    }
+
+    table.table thead {
+        background-color: #f3f4f6;
+        color: #2c3e50;
+        font-weight: 600;
+    }
+
+    table.table tbody tr:hover {
+        background-color: #f1faee; /* light warm background on hover */
+    }
+
+    /* Badges */
+    .badge.bg-warning {
+        background-color: #f4a261 !important; /* warm orange for pending */
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .badge.bg-success {
+        background-color: #2a9d8f !important; /* teal/sage for approved */
+        color: #fff;
+        font-weight: 600;
+    }
+
+    /* Section headings */
+    h4 {
+        font-weight: 700;
+        color: #34495e;
+        margin-bottom: 1rem;
+    }
+
+</style>
 
 <div class="container mt-5">
 
     <div class="row">
-        <!-- Left column: Profile info -->
+    <!-- Left column: Profile info -->
         <div class="col-md-4">
-            <div class="card shadow text-center">
-                <div class="card-body">
-                    <img src="@(!string.IsNullOrEmpty(Model.ProfilePictureUrl) ? Model.ProfilePictureUrl : "https://via.placeholder.com/150")"
-                         class="rounded-circle mb-3"
-                         width="150"
-                         height="150" />
+            <div class="card shadow text-center p-4 d-flex flex-column align-items-center">
+                <img src="@imagePath" class="profile-img mb-3" />
 
-                    <h4>@Model.Name</h4>
-                    <p class="text-muted">@Model.Email</p>
-                    <p>Phone: @(Model.PhoneNumber ?? "N/A")</p>
+                <h4>@Model.Name</h4>
+                <p class="text-muted mb-1">@Model.Email</p>
+                <p class="mb-3">Phone: @(Model.PhoneNumber ?? "N/A")</p>
 
-                    <button class="btn btn-outline-primary btn-sm">
-                        Edit Profile
-                    </button>
-                </div>
+                <a asp-action="EditProfile" class="btn btn-outline-primary btn-sm btn-edit">
+                    Edit Profile
+                </a>
             </div>
-        </div>
+        </div
 
         <!-- Right column: Borrowed books and room reservations -->
         <div class="col-md-8">
@@ -51,6 +143,7 @@
                                 @foreach (var b in Model.BorrowedBooks)
                                 {
                                     <tr>
+
                                         <td>@b.Book.Title</td>
                                         <td>@b.BorrowDate?.ToString("yyyy-MM-dd")</td>
                                         <td>@b.DueDate.ToString("yyyy-MM-dd")</td>
@@ -91,38 +184,41 @@
                                     <th>Date</th>
                                     <th>Time</th>
                                     <th>Status</th>
-</tr>
-</thead>
-<tbody>
-    @foreach (var r in Model.RoomReservations)
-    {
-        <tr>
-            <td>@r.Room.RoomName</td>
-            <td>@r.ReservationDateTime.ToString("yyyy-MM-dd")</td>
-            <td>@r.ReservationDateTime.ToString("HH:mm") - @r.EndDateTime?.ToString("HH:mm")</td>
-            <td>
-                @if (r.IsConfirmedByAdmin == true)
-                {
-                    <span class="badge bg-success">Approved</span>
-                }
-                else
-                {
-                    <span class="badge bg-warning">Pending</span>
-                }
-            </td>
-        </tr>
-    }
-</tbody>
-</table>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var r in Model.RoomReservations)
+                                {
+                                    <tr>
+                                        <td>@r.Room.RoomName</td>
+                                        <td>@r.ReservationDateTime.ToString("yyyy-MM-dd")</td>
+                                        <td>
+                                            @r.ReservationDateTime.ToString("HH:mm")
+                                            -
+                                            @(r.EndDateTime != null ? r.EndDateTime.Value.ToString("HH:mm") : "")
+                                        </td>
+                                        <td>
+                                            @if (r.IsConfirmedByAdmin == true)
+                                            {
+                                                <span class="badge bg-success">Approved</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning">Pending</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     }
                     else
                     {
-<p>No room reservations yet.</p>
+                        <p>No room reservations yet.</p>
                     }
-</div>
-</div>
+                </div>
+            </div>
 
-</div>
-</div>
-
+        </div>
+    </div>
 </div>

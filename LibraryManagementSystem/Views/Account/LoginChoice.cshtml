@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+<body style="background: url('/images/3.jpeg') center center / cover no-repeat; min-height: 100vh;color:#fff;">
+
+    <div class="container text-center" style="margin-top:150px;">
+        <h2>Login As</h2>
+        <div class="mt-4">
+            <a asp-controller="Student" asp-action="Login" class="btn btn-primary m-2">
+                Student
+            </a>
+
+            <a asp-controller="Admin" asp-action="Login" class="btn btn-dark m-2">
+                Admin
+            </a>
+        </div>
+    </div>
+</body>

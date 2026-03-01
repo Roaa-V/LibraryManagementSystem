@@ -1,62 +1,106 @@
 ﻿@model List<LibraryManagementSystem.Models.MeetingRoom>
 
-<h2>Reserve a Room</h2>
+@{
+    Layout = "_StudentLayout";
+    var studentId = Context.Session.GetInt32("StudentId");
+    var showToast = TempData["ShowToast"] != null && (bool)TempData["ShowToast"];
+    var random = new Random();
+}
+
+<h2 class="mb-4" style="font-family:'Segoe UI', sans-serif; color:#344e41; font-weight:700;">Reserve a Room</h2>
 
 <div class="row">
-    <div class="col-md-6">
-        <h4>Available Rooms</h4>
-        <table class="table table-striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>Room Name</th>
-                    <th>Location</th>
-                    <th>Capacity</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var room in Model)
-                {
-                    <tr>
-                        <td>@room.RoomName</td>
-                        <td>@room.Location</td>
-                        <td>@room.Capacity</td>
-                        <td>
-                            <a asp-action="ReserveRoom" asp-route-id="@room.Id" class="btn btn-primary btn-sm">
-                                Reserve
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    @foreach (var room in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm rounded-4 hover-card" style="background-color:#f5f5dc; transition: transform 0.25s, box-shadow 0.25s;">
+                <div class="card-body">
+                    <h5 class="card-title" style="color:#2f4f4f; font-weight:600; font-family:'Segoe UI', sans-serif;">@room.RoomName</h5>
+                    <p class="card-text" style="color:#4b4b3f; font-size:0.95rem;">
+                        <strong>Location:</strong> @room.Location <br />
+                        <strong>Capacity:</strong> @(room.Capacity.HasValue ? room.Capacity.Value.ToString() : random.Next(4, 21))
+                    </p>
 
-    <div class="col-md-6">
-        <h4>My Reservations</h4>
-        <table class="table table-striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>Room</th>
-                    <th>Reservation Time</th>
-                    <th>End Time</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var room in Model)
-                {
-                    @foreach (var r in room.RoomReservations.Where(rr => rr.StudentId == 1)) // replace 1 with logged-in student ID
-                    {
-                        <tr>
-                            <td>@room.RoomName</td>
-                            <td>@r.ReservationDateTime.ToString("g")</td>
-                            <td>@(r.EndDateTime.HasValue? r.EndDateTime.Value.ToString("g") : "-")</td>
-                            <td>@(r.IsConfirmedByAdmin == true ? "Approved" : "Pending")</td>
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
+                    <form asp-action="ReserveRoom" method="post">
+                        <input type="hidden" name="roomId" value="@room.Id" />
+                        <div class="mb-3">
+                            <label class="form-label" style="font-weight:500; color:#344e41;">Start Time:</label>
+                            <input type="datetime-local" name="startTime" class="form-control rounded-3" style="border-color:#cfcfc4; background-color:#ffffff; color:#2f4f4f;" required />
+                        </div>
+
+                        <button type="submit" class="btn w-100" style="background-color:#7a9e7e; color:#fdf6e3; font-weight:600; border-radius:0.5rem; border:none; transition: background-color 0.25s;">
+                            Reserve
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<h4 class="mt-5 mb-3" style="font-family:'Segoe UI', sans-serif; color:#344e41; font-weight:700;">My Reservations</h4>
+
+@if (Model.Any(r => r.RoomReservations.Any(rr => rr.StudentId == studentId)))
+{
+    <div class="row">
+        @foreach (var room in Model)
+        {
+            @foreach (var r in room.RoomReservations.Where(rr => rr.StudentId == studentId))
+            {
+                <div class="col-md-6 mb-3">
+                    <div class="card rounded-3 shadow-sm hover-card" style="background-color:#f0ead6;">
+                        <div class="card-body">
+                            <h6 class="card-title" style="color:#2f4f4f; font-weight:600;">@room.RoomName</h6>
+                            <p class="card-text mb-1">
+                                <strong>Start:</strong> @r.ReservationDateTime.ToString("g")<br />
+                                <strong>End:</strong> @r.EndDateTime?.ToString("g")
+                            </p>
+                            <span class="badge @(r.IsConfirmedByAdmin == true ? "bg-success" : "bg-warning text-dark")" style="font-size:0.85rem;">
+                                @(r.IsConfirmedByAdmin == true ? "Approved" : "Pending")
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+}
+else
+{
+    <p class="text-muted" style="font-family:'Segoe UI', sans-serif;">You have no reservations yet.</p>
+}
+
+<!-- Toast notification -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index:1055;">
+    <div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" @(showToast ? "" : "style=\"display:none;\"")>
+        <div class="d-flex">
+            <div class="toast-body">
+                Reservation submitted! Waiting for admin approval.
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
     </div>
 </div>
+@section Scripts {
+    <script>
+        // Hover effect for all cards
+        document.querySelectorAll('.hover-card').forEach(card => {
+            card.addEventListener('mouseover', () => {
+                card.style.transform = 'translateY(-5px)';
+                card.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+            });
+            card.addEventListener('mouseout', () => {
+                card.style.transform = 'translateY(0)';
+                card.style.boxShadow = '0 4px 8px rgba(0,0,0,0.05)';
+            });
+        });
+
+        // Show toast if flag is set
+        var showToast = @showToast.ToString().ToLower();
+        if(showToast){
+            var toastEl = document.querySelector('.toast');
+            var toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        }
+    </script>
+}

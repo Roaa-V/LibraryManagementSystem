@@ -1,8 +1,15 @@
 ﻿@model IEnumerable<LibraryManagementSystem.Models.BorrowedBook>
 
 @{
-    Layout = "_Layout";
+    Layout = "_AdminLayout";
 }
+
+<div class="d-flex justify-content-end mb-3">
+    <a asp-action="@(ViewData["ExportAction"] ?? "Export")" class="btn"
+       style="background-color: #a3d2ca; color: #0b3d2e; font-weight: 500;">
+        <i class="bi bi-file-earmark-arrow-down me-1"></i> Export
+    </a>
+</div>
 
 <div class="container mt-3">
     <h2>Pending Borrow Requests</h2>

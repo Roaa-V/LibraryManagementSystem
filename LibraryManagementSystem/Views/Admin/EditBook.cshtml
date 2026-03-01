@@ -1,7 +1,7 @@
 ﻿@model LibraryManagementSystem.Models.Book
 
 @{
-    Layout = "_Layout";
+    Layout = "_AdminLayout";
 }
 
 <h2>Edit Book</h2>
@@ -17,6 +17,16 @@
     <div class="mb-3">
         <label>Author</label>
         <input asp-for="Author" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Genre" class="form-label"></label>
+        <input asp-for="Genre" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
     </div>
 
     <div class="mb-3">
